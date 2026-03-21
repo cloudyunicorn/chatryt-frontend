@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, FormEvent, KeyboardEvent } from "react";
 import { SendIcon } from "./Icons";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -19,7 +21,6 @@ export default function ChatInput({
   const [input, setInput] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Handle external value injection (from suggestion chips)
   useEffect(() => {
     if (externalValue) {
       setInput(externalValue);
@@ -28,7 +29,6 @@ export default function ChatInput({
     }
   }, [externalValue, onExternalValueConsumed]);
 
-  // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
@@ -37,7 +37,6 @@ export default function ChatInput({
     }
   }, [input]);
 
-  // Refocus after loading completes
   useEffect(() => {
     if (!isLoading) {
       textareaRef.current?.focus();
@@ -60,40 +59,33 @@ export default function ChatInput({
   }
 
   return (
-    <footer
-      className="px-4 pb-5 pt-3 md:px-0"
-      style={{ background: "var(--bg-primary)" }}
-    >
+    <footer className="px-4 pb-4 pt-2 md:px-0 bg-background">
       <form
         onSubmit={handleSubmit}
-        className="input-glow glass-panel mx-auto flex w-full max-w-2xl items-end gap-3 px-4 py-3 transition-all duration-300"
+        className="mx-auto flex w-full max-w-2xl items-end gap-2 rounded-xl border border-border/60 bg-card/60 backdrop-blur-lg px-3 py-2.5 transition-all duration-200 focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/20"
       >
-        <textarea
+        <Textarea
           ref={textareaRef}
           id="chat-input"
           rows={1}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message…"
+          placeholder="Message ChatRYT…"
           disabled={isLoading}
-          className="flex-1 resize-none border-none bg-transparent text-sm leading-relaxed outline-none placeholder:text-gray-500"
-          style={{ color: "var(--text-primary)", maxHeight: 150 }}
+          className="flex-1 min-h-[24px] max-h-[150px] resize-none border-none bg-transparent shadow-none focus-visible:ring-0 text-[13px] leading-relaxed p-0 py-1 placeholder:text-muted-foreground/60"
         />
-        <button
+        <Button
           type="submit"
           disabled={!input.trim() || isLoading}
-          id="send-button"
-          className="send-btn flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-white"
+          size="icon"
+          className="h-8 w-8 shrink-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all disabled:opacity-30"
         >
           <SendIcon />
-        </button>
+        </Button>
       </form>
-      <p
-        className="mt-2 text-center text-xs"
-        style={{ color: "var(--text-muted)" }}
-      >
-        ChatRYT can make mistakes. Consider verifying important information.
+      <p className="mt-1.5 text-center text-[10px] text-muted-foreground/50">
+        ChatRYT can make mistakes. Verify important info.
       </p>
     </footer>
   );

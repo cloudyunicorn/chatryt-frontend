@@ -1,4 +1,5 @@
 import { SparklesIcon } from "./Icons";
+import { Button } from "@/components/ui/button";
 
 interface EmptyStateProps {
   onSuggestionClick: (suggestion: string) => void;
@@ -12,34 +13,29 @@ const SUGGESTIONS = [
 
 export default function EmptyState({ onSuggestionClick }: EmptyStateProps) {
   return (
-    <div className="animate-fade-in flex flex-col items-center justify-center pt-28 text-center">
-      <div className="mb-6">
+    <div className="animate-fade-in flex flex-col items-center justify-center pt-24 md:pt-32 text-center px-4">
+      <div className="mb-5 rounded-2xl bg-primary/10 p-4">
         <SparklesIcon />
       </div>
-      <h2 className="shimmer-text mb-2 text-2xl font-bold">
+
+      <h2 className="shimmer-text mb-1.5 text-xl font-semibold tracking-tight">
         Hello! I&apos;m ChatRYT
       </h2>
-      <p
-        className="max-w-sm text-sm leading-relaxed"
-        style={{ color: "var(--text-secondary)" }}
-      >
-        Your AI-powered assistant. Ask me anything — from coding questions to
-        creative writing, I&apos;m here to help.
+      <p className="max-w-xs text-[13px] leading-relaxed text-muted-foreground">
+        Your AI assistant. Ask me anything — from code to creative writing.
       </p>
-      <div className="mt-8 flex flex-wrap justify-center gap-2">
+
+      <div className="mt-7 flex flex-wrap justify-center gap-2">
         {SUGGESTIONS.map((suggestion) => (
-          <button
+          <Button
             key={suggestion}
+            variant="outline"
+            size="sm"
             onClick={() => onSuggestionClick(suggestion)}
-            className="cursor-pointer rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 hover:scale-105"
-            style={{
-              background: "var(--bg-tertiary)",
-              border: "1px solid var(--border-subtle)",
-              color: "var(--text-secondary)",
-            }}
+            className="rounded-full text-xs font-normal text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-200"
           >
             {suggestion}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

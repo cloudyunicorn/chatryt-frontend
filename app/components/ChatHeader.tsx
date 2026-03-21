@@ -1,4 +1,6 @@
 import { BotIcon, PlusIcon } from "./Icons";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 interface ChatHeaderProps {
   onNewChat: () => void;
@@ -6,57 +8,41 @@ interface ChatHeaderProps {
 
 export default function ChatHeader({ onNewChat }: ChatHeaderProps) {
   return (
-    <header
-      className="flex items-center gap-3 px-6 py-4"
-      style={{
-        background: "var(--bg-secondary)",
-        borderBottom: "1px solid var(--border-subtle)",
-      }}
-    >
+    <header className="flex items-center gap-3 px-5 py-3.5 border-b border-border/50 bg-card/80 backdrop-blur-xl">
       {/* Brand */}
-      <div
-        className="flex items-center justify-center rounded-xl"
-        style={{
-          width: 38,
-          height: 38,
-          background: "var(--accent-gradient)",
-        }}
-      >
-        <BotIcon size={20} />
-      </div>
-      <div>
-        <h1 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>
+      <Avatar className="h-9 w-9 rounded-xl">
+        <AvatarFallback className="bg-gradient-to-br from-violet-500 to-indigo-500 text-white rounded-xl text-xs font-bold">
+          <BotIcon size={18} />
+        </AvatarFallback>
+      </Avatar>
+
+      <div className="leading-tight">
+        <h1 className="text-sm font-semibold tracking-tight text-foreground">
           ChatRYT
         </h1>
-        <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-          Powered by GPT-4o mini
+        <p className="text-[11px] text-muted-foreground">
+          Powered by GPT
         </p>
       </div>
 
       {/* Right side */}
-      <div className="ml-auto flex items-center gap-4">
-        {/* New Chat button */}
-        <button
+      <div className="ml-auto flex items-center gap-3">
+        <Button
           onClick={onNewChat}
-          id="new-chat-button"
-          className="flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 hover:scale-105"
-          style={{
-            background: "var(--bg-tertiary)",
-            border: "1px solid var(--border-subtle)",
-            color: "var(--text-secondary)",
-          }}
+          variant="ghost"
+          size="sm"
+          className="h-8 gap-1.5 rounded-lg text-xs text-muted-foreground hover:text-foreground"
         >
           <PlusIcon size={14} />
           New Chat
-        </button>
+        </Button>
 
-        {/* Status dot */}
         <div className="flex items-center gap-1.5">
-          <span
-            className="inline-block h-2 w-2 rounded-full"
-            style={{ background: "#22c55e", boxShadow: "0 0 6px #22c55e88" }}
-          />
-          <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          <span className="text-[11px] text-muted-foreground">
             Online
           </span>
         </div>

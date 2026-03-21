@@ -1,5 +1,6 @@
 import type { Message } from "@/app/types/chat";
 import { BotIcon } from "./Icons";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface MessageBubbleProps {
   message: Message;
@@ -14,23 +15,23 @@ export default function MessageBubble({ message, animationDelay = "0s" }: Messag
       className={`animate-fade-in-up flex ${isUser ? "justify-end" : "justify-start"}`}
       style={{ animationDelay }}
     >
-      <div className="flex max-w-[85%] gap-3 md:max-w-[75%]">
-        {/* Assistant avatar */}
+      <div className={`flex max-w-[80%] gap-2.5 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
+        {/* Avatar */}
         {!isUser && (
-          <div
-            className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-            style={{
-              background: "var(--bg-tertiary)",
-              border: "1px solid var(--border-subtle)",
-            }}
-          >
-            <BotIcon size={16} />
-          </div>
+          <Avatar className="h-7 w-7 shrink-0 rounded-lg mt-0.5">
+            <AvatarFallback className="bg-secondary rounded-lg text-muted-foreground">
+              <BotIcon size={14} />
+            </AvatarFallback>
+          </Avatar>
         )}
 
         {/* Bubble */}
         <div
-          className={`px-4 py-3 text-sm leading-relaxed ${isUser ? "msg-user" : "msg-assistant"}`}
+          className={`px-3.5 py-2.5 text-[13px] leading-relaxed ${
+            isUser
+              ? "rounded-2xl rounded-br-md bg-primary text-primary-foreground"
+              : "rounded-2xl rounded-bl-md bg-secondary/70 text-foreground border border-border/40"
+          }`}
         >
           {message.content.split("\n").map((line, i, arr) => (
             <span key={i}>

@@ -5,6 +5,7 @@ import type { Message } from "@/app/types/chat";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import EmptyState from "./EmptyState";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -21,7 +22,6 @@ export default function ChatMessages({
 }: ChatMessagesProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
@@ -29,43 +29,32 @@ export default function ChatMessages({
   const isEmpty = messages.length === 0;
 
   return (
-    <main className="flex-1 overflow-y-auto px-4 py-6 md:px-0">
-      <div className="mx-auto w-full max-w-2xl space-y-4">
-        {/* Empty State */}
+    <ScrollArea className="flex-1">
+      <div className="mx-auto w-full max-w-2xl space-y-3 px-4 py-5 md:px-0">
         {isEmpty && !isLoading && (
           <EmptyState onSuggestionClick={onSuggestionClick} />
         )}
 
-        {/* Message Bubbles */}
         {messages.map((msg, index) => (
           <MessageBubble
             key={msg.id}
             message={msg}
-            animationDelay={`${index * 0.05}s`}
+            animationDelay={`${index * 0.04}s`}
           />
         ))}
 
-        {/* Typing Indicator */}
         {isLoading && <TypingIndicator />}
 
-        {/* Error Message */}
         {error && (
           <div className="animate-fade-in-up flex justify-center">
-            <div
-              className="rounded-xl px-4 py-3 text-sm"
-              style={{
-                background: "rgba(239, 68, 68, 0.1)",
-                border: "1px solid rgba(239, 68, 68, 0.2)",
-                color: "#fca5a5",
-              }}
-            >
-              ⚠️ {error} — please check if the backend is running on port 8000.
+            <div className="rounded-lg px-3.5 py-2.5 text-xs bg-destructive/10 border border-destructive/20 text-red-300">
+              ⚠️ {error} — check if the backend is running.
             </div>
           </div>
         )}
 
-        <div ref={bottomRef} />
+        <div ref={bottomRef} className="h-px w-full" />
       </div>
-    </main>
+    </ScrollArea>
   );
 }

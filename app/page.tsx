@@ -19,7 +19,7 @@ export default function ChatPage() {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col" style={{ background: "var(--bg-primary)" }}>
+    <div className="flex h-screen flex-col bg-background">
       <ChatHeader onNewChat={startNewChat} />
 
       <ChatMessages
