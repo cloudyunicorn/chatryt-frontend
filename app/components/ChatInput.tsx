@@ -73,7 +73,7 @@ export default function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder="Message ChatRYT…"
           disabled={isLoading}
-          className="flex-1 min-h-[24px] max-h-[150px] resize-none border-none bg-transparent shadow-none focus-visible:ring-0 text-[13px] leading-relaxed p-0 py-1 placeholder:text-muted-foreground/60"
+          className="flex-1 min-h-[24px] max-h-[150px] resize-none border-none bg-transparent shadow-none focus-visible:ring-0 text-base md:text-[13px] leading-relaxed p-0 py-1 placeholder:text-muted-foreground/60"
         />
         <Button
           type="submit"
