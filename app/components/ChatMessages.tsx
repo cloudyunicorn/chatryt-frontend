@@ -45,8 +45,6 @@ export default function ChatMessages({
           />
         ))}
 
-        {isLoading && <TypingIndicator />}
-
         {error && (
           <div className="animate-fade-in-up flex justify-center">
             <div className="rounded-lg px-3.5 py-2.5 text-xs bg-destructive/10 border border-destructive/20 text-red-300">
