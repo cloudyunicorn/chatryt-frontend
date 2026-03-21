@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import type { Message } from "@/app/types/chat";
-import { sendChatMessage } from "@/app/lib/api";
+import { sendStreamMessage } from "@/app/lib/api";
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -25,21 +25,28 @@ export function useChat() {
     if (!trimmed || isLoading) return;
 
     const userMsg: Message = { id: generateId(), role: "user", content: trimmed };
-    setMessages((prev) => [...prev, userMsg]);
+    const assistantId = generateId();
+    const placeholderMsg: Message = { id: assistantId, role: "assistant", content: "" };
+    
+    setMessages((prev) => [...prev, userMsg, placeholderMsg]);
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await sendChatMessage(trimmed, sessionIdRef.current);
-      const assistantMsg: Message = {
-        id: generateId(),
-        role: "assistant",
-        content: response,
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
+      await sendStreamMessage(trimmed, sessionIdRef.current, (chunk) => {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantId
+              ? { ...msg, content: msg.content + chunk }
+              : msg
+          )
+        );
+      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Something went wrong";
       setError(errorMessage);
+      // Remove the empty placeholder if something failed before streaming started
+      setMessages((prev) => prev.filter(msg => msg.id !== assistantId || msg.content !== ""));
     } finally {
       setIsLoading(false);
     }
