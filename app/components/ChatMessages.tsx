@@ -5,7 +5,6 @@ import type { Message } from "@/app/types/chat";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import EmptyState from "./EmptyState";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -22,14 +21,18 @@ export default function ChatMessages({
 }: ChatMessagesProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll with a small delay to ensure DOM has rendered
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const timeout = setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+    return () => clearTimeout(timeout);
   }, [messages, isLoading]);
 
   const isEmpty = messages.length === 0;
 
   return (
-    <ScrollArea className="flex-1">
+    <div className="flex-1 overflow-y-auto overscroll-contain">
       <div className="mx-auto w-full max-w-2xl space-y-3 px-4 py-5 md:px-0">
         {isEmpty && !isLoading && (
           <EmptyState onSuggestionClick={onSuggestionClick} />
@@ -55,6 +58,6 @@ export default function ChatMessages({
 
         <div ref={bottomRef} className="h-px w-full" />
       </div>
-    </ScrollArea>
+    </div>
   );
 }
