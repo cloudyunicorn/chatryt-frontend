@@ -19,20 +19,19 @@ export default function ChatMessages({
   error,
   onSuggestionClick,
 }: ChatMessagesProps) {
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll with a small delay to ensure DOM has rendered
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 50);
-    return () => clearTimeout(timeout);
+    if (scrollRef.current) {
+      // Direct DOM scroll is 100% reliable across all mobile browsers
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="flex-1 overflow-y-auto overscroll-contain">
+    <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain scroll-smooth">
       <div className="mx-auto w-full max-w-2xl space-y-3 px-4 py-5 md:px-0">
         {isEmpty && !isLoading && (
           <EmptyState onSuggestionClick={onSuggestionClick} />
@@ -56,7 +55,8 @@ export default function ChatMessages({
           </div>
         )}
 
-        <div ref={bottomRef} className="h-px w-full" />
+        {/* Dummy spacer for padding at the bottom */}
+        <div className="h-4 w-full" />
       </div>
     </div>
   );
