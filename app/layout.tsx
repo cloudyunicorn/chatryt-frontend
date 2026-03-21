@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const roboto = Roboto({
+const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -37,7 +36,7 @@ export default function RootLayout({
       <body
         className={cn(
           "antialiased font-sans",
-          roboto.variable,
+          inter.variable,
           jetbrainsMono.variable
         )}
       >
