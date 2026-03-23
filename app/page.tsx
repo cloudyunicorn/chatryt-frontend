@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useChat } from "@/app/hooks/useChat";
 import ChatHeader from "@/app/components/ChatHeader";
 import ChatMessages from "@/app/components/ChatMessages";
@@ -20,7 +20,14 @@ export default function ChatPage() {
   } = useChat();
   
   const [pendingSuggestion, setPendingSuggestion] = useState<string>("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Set initial sidebar state based on screen size
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsSidebarOpen(true);
+    }
+  }, []);
 
   const handleSuggestionClick = useCallback((suggestion: string) => {
     setPendingSuggestion(suggestion);
