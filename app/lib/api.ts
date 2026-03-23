@@ -3,6 +3,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export async function sendStreamMessage(
   message: string,
   sessionId: string,
+  userId: string,
   onChunk: (text: string) => void
 ): Promise<void> {
   const response = await fetch(`${API_BASE}/chat/`, {
@@ -10,7 +11,7 @@ export async function sendStreamMessage(
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ message, session_id: sessionId }),
+    body: JSON.stringify({ message, session_id: sessionId, user_id: userId }),
   });
 
   if (!response.ok) {
@@ -53,4 +54,28 @@ export async function sendStreamMessage(
   } finally {
     reader.releaseLock();
   }
+}
+
+export interface ChatThread {
+  id: string;
+  title: string;
+  updated_at: string;
+}
+
+export async function fetchThreads(userId: string): Promise<ChatThread[]> {
+  const response = await fetch(`${API_BASE}/chat/threads?user_id=${userId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch threads");
+  }
+  const data = await response.json();
+  return data.threads || [];
+}
+
+export async function fetchHistory(threadId: string, userId: string): Promise<any[]> {
+  const response = await fetch(`${API_BASE}/chat/history/${threadId}?user_id=${userId}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch history");
+  }
+  const data = await response.json();
+  return data.messages || [];
 }
