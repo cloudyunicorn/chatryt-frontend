@@ -1,4 +1,4 @@
-const API_BASE = "/api/chat";
+const API_BASE = "/api";
 
 export async function sendStreamMessage(
   message: string,
